@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>个人中心</title>
+  <link rel="stylesheet" href="./layui-v2.5.5/layui/css/layui.css">
+  <script src="./layui-v2.5.5/layui/layui.all.js"></script>
+  <script src="./js/jquery.js"></script>
+  <style>
+    body {
+      background: url("./img/Mine-background.png") top center no-repeat #ffffff;
+      background-size: 100% 242px;
+    }
+
+    #file1 {
+      display: none;
+    }
+
+    .back {
+      width: 20px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+
+    .reportPhoto {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border:solid 4px #fff;
+      padding: 5px;
+    }
+
+    .touxiang {
+      margin: 0 auto;
+      text-align: center;
+      padding: 40px 0 20px;
+
+    }
+
+    .input_s {
+      width: 220px;
+      margin: 0 auto 10px;
+    }
+
+    .input_a {
+      width: 160px;
+      height: 28px;
+      line-height: 28px;
+      border-radius: 5px;
+      border: 1px solid #e1e1e1;
+      outline: none;
+      padding-left: 4px;
+    }
+
+    .submit {
+      background: -moz-linear-gradient(left, #1bc0f1 0%, #1bceb2 100%);
+      background: -webkit-gradient(linear, top left, top right, color-stop(0%, #1bc0f1), color-stop(100%, #1bceb2));
+      background: -webkit-linear-gradient(left, #1bc0f1 0%, #1bceb2 100%);
+      background: -o-linear-gradient(left, #1bc0f1 0%, #1bceb2 100%);
+      background: -ms-linear-gradient(left, #1bc0f1 0%, #1bceb2 100%);
+      background: linear-gradient(to right, #1bc0f1 0%, #1bceb2 100%);
+      color: #fff;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      font-size: 12px;
+      width: 100px;
+      height: 30px;
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+  <img class="back" src="./img/left.png" alt="" srcset="">
+  <div class="touxiang">
+    <input type="file" id="file1" accept="image/*" />
+    <img class="reportPhoto" src="./img/defaultAvatar.png">
+  </div>
+  <div class="input_s" style="padding: 100px 0 0;">
+    <span>账号：</span>
+    <span id="accountNumber"></span>
+  </div>
+  <div class="input_s">
+    <span>昵称：</span>
+    <input class="nickname input_a" type="text">
+  </div>
+  <div class="input_s">
+    <span>密码：</span>
+    <input class="password input_a" type="text">
+  </div>
+
+
+  <!-- <div class="saveChanges">保存修改</div> -->
+  <!-- <input type="text" class="input_a"> -->
+
+
+  <div class="input_s submit saveChanges">保存修改</div>
+</body>
+<script>
+  var images;
+
+  var userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  $("#accountNumber").html(userInfo.name);
+  // 用户信息
+  $.ajax({
+    type: "get",
+    url: "http://kaizhou.1352.site.veeteam.com/home/get_image/"+ + JSON.parse(localStorage.getItem("userInfo")).user_id,
+    headers: {
+      "token": JSON.parse(localStorage.getItem("userInfo")).token
+    },
+    // data: {
+    //   user_id: JSON.parse(localStorage.getItem("userInfo")).user_id
+    // },
+    success: function (res) {
+      console.log(res);
+      $(".nickname").val(res.data.nickname);
+      $(".reportPhoto").attr("src", res.data.image || "./img/defaultAvatar.png");
+      images = res.data.image;
+    }
+  })
+
+  // 上传图片
+  $(".reportPhoto").click(function () {
+    $("#file1").click();
+    var f = document.getElementById("file1");
+    f.onchange = function () {
+      var file = this.files[0];
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function () {
+        $(".reportPhoto").attr("src", reader.result);
+        $(".reportPhoto").css("width", "100px");
+        var source = reader.result.split(",")[1];
+
+        $.ajax({
+          type: "POST",
+          url: "http://api.hnst.top/image/upload",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          data: {
+            source
+          },
+          success: res => {
+            console.log(res);
+            alert(res.message);
+            images = res.data.url;
+          }
+        })
+      }
+    }
+  })
+
+  $(".back").click(function () {
+    window.history.back(-1);
+  })
+
+  // 提交修改
+  $(".saveChanges").click(function () {
+    $.ajax({
+      type: "post",
+      url: "http://kaizhou.1352.site.veeteam.com/home/change_password",
+      headers: {
+        "token": JSON.parse(localStorage.getItem("userInfo")).token
+      },
+      data: {
+        password: $(".password").val(),
+        image: images,
+        nickname: $(".nickname").val(),
+        user_id: JSON.parse(localStorage.getItem("userInfo")).user_id
+      },
+      success: function (res) {
+        console.log(res);
+        if (res.code == 1000) {
+          alert(res.message);
+          window.location.href = "login.html";
+        }
+      }
+    })
+  })
+</script>
+
+</html>

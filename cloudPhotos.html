@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>云端照片</title>
+  <link rel="stylesheet" href="./layui-v2.5.5/layui/css/layui.css">
+  <script src="./layui-v2.5.5/layui/layui.all.js"></script>
+  <style>
+    body{
+      background-color: #f8f8f8;
+    }
+    .back {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #fff;
+      font-weight: 600;
+      font-size: 18px;
+      height: 40px;
+      width: 100%;
+      background-color: #f8f8f8;
+      position: fixed;
+      top: 0;
+    }
+
+    .back>img {
+      width: 24px;
+    }
+
+    .loadMore {
+      background-color: dodgerblue;
+      width: 80px;
+      text-align: center;
+      height: 40px;
+      line-height: 40px;
+      color: #ffffff;
+      border-radius: 30px;
+      margin: 20px auto;
+    }
+    .pictureContainer{
+      padding-top: 40px;
+    }
+
+    .pictureContainer img {
+      width: 30%;
+      margin: 10px 1%;
+      transition: all .4s;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="back" >
+    <img src="./img/leftBlack.png" alt="" srcset="">
+    云端照片
+  </div>
+  
+  <div class="pictureContainer">
+  </div>
+  <div class="loadMore">
+    加载更多
+  </div>
+</body>
+<script src="./js/jquery.js"></script>
+<script>
+  $(".back").click(function () {
+    window.history.back(-1);
+  })
+  function getThePicture(page) {
+    var loading;
+    $.ajax({
+      type: "post",
+      url: "http://kaizhou.1352.site.veeteam.com/home/image_info",
+      headers: {
+        "token": JSON.parse(localStorage.getItem("userInfo")).token
+      },
+      data: {
+        user_id: JSON.parse(localStorage.getItem("userInfo")).user_id,
+        page,
+        limit: 5
+      },
+      beforeSend: res => {
+        loading = layer.load(0, {
+          shade: [0.3,'#333333'],
+          time: 10* 1000
+        });
+      },
+      success: function (res) {
+        layer.close(loading);
+        
+        var htmlString = "";
+        for (item of res.data) {
+          htmlString += `<img src="${item.images}">`
+        }
+        $(".pictureContainer").append(htmlString);
+        pictureContainersFlow();
+      }
+    })
+  }
+
+  getThePicture(0);
+
+  var page = 0;
+  $(".loadMore").click(function () {
+    page++;
+    getThePicture(page);
+  })
+
+  // 瀑布流
+  function pictureContainersFlow() {
+    var colCount   //定义列数
+    var colHeightArry = []   //定义列高度数组
+    var imgWidth = $('.pictureContainer img').outerWidth(true)   //单张图片的宽度
+
+    colCount = parseInt($('.pictureContainer').width() / imgWidth)   //计算出列数
+    for (var i = 0; i < colCount; i++) {
+      colHeightArry[i] = 0
+    }
+    //[0,0,0]
+
+    $('.pictureContainer img').on('load', function () {
+
+      var minValue = colHeightArry[0]  //定义最小的高度
+      var minIndex = 0  //定义最小高度的下标
+      for (var i = 0; i < colCount; i++) {
+        if (colHeightArry[i] < minValue) {   //如果最小高度组数中的值小于最小值
+          minValue = colHeightArry[i]   //那么认为最小高度数组中的值是真正的最小值
+          minIndex = i  //最小下标为当前下标
+        }
+      }
+
+      $(this).css({
+        left: minIndex * imgWidth,
+        top: minValue
+      })
+      colHeightArry[minIndex] += $(this).outerHeight(true)
+    })
+
+
+    //当窗口大小重置之后，重新执行
+    $(window).on('resize', function () {
+      reset()
+    })
+
+
+    //当窗口加载完毕，执行瀑布流
+    $(window).on('load', function () {
+      reset()
+    })
+
+    //定义reset函数
+    function reset() {
+      var colHeightArry = []
+      colCount = parseInt($('.pictureContainer').width() / imgWidth)
+      for (var i = 0; i < colCount; i++) {
+        colHeightArry[i] = 0
+      }
+      $('.pictureContainer img').each(function () {
+        var minValue = colHeightArry[0]
+        var minIndex = 0
+        for (var i = 0; i < colCount; i++) {
+          if (colHeightArry[i] < minValue) {
+            minValue = colHeightArry[i]
+            minIndex = i
+          }
+        }
+
+        $(this).css({
+          left: minIndex * imgWidth,
+          top: minValue
+        })
+        colHeightArry[minIndex] += $(this).outerHeight(true)
+      })
+    }
+  }
+
+</script>
+
+</html>

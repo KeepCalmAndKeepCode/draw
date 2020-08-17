@@ -1,0 +1,84 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.avatarNickname {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("../img/Mine-background.png");
+  background-size: 100% 100%;
+  position: relative;
+}
+.avatarNickname > img{
+  position: absolute;
+  width: 20px;
+  left: 10px;
+  top: 10px;
+}
+.avatarNickname div {
+  width: 80px;
+  height: 100px;
+  text-align: center;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.avatarNickname div img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: solid 4px #ffffff;
+  box-sizing: border-box;
+  padding: 5px;
+}
+
+.avatarNickname span {
+  padding-top: 5px;
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+
+.navigationBar {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  border-bottom: 4px solid #F6F6F6;
+  padding: 14px 0;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.functionList div {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  border-bottom: solid 2px #F6F6F6;
+}
+.functionList div :nth-child(1){
+  border: solid 2px #1EF92D;
+  border-radius: 50%;
+  display: block;
+  padding: 4px;
+  margin: 0 10px;
+}
+.functionList div :nth-child(2){
+  flex: 1;
+}
+.functionList div img{
+  width: 30px;
+  box-sizing: border-box;
+}
+.functionList .right{
+  width: 20px;
+  margin-right: 10px;
+}
+
+.layui-layer-content{
+  padding: 10px;
+}

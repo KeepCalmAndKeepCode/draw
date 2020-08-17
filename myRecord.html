@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>我的记录</title>
+  <style>
+    body {
+      background: #f8f8f8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .edit {
+      width: 80px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .edit div {
+      background-color: #37C375;
+      color: #ffffff;
+      padding: 5px 10px;
+      border-radius: 10px;
+    }
+
+    .recordList {
+      display: flex;
+      align-content: center;
+      background: #fff;
+      margin: 20px 15px;
+      padding: 20px 0 20px 0;
+      border-radius: 6px;
+      box-shadow: 0 0 2px 2px #bbb;
+    }
+
+    .lotIconContainer {
+      flex: 0.2;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .information {
+      flex: 1;
+    }
+
+    .information p {
+      padding: 0;
+      line-height: 26px;
+      margin: 0;
+    }
+
+    .information>div {
+      display: flex;
+    }
+
+    .back {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #fff;
+      font-weight: 600;
+      font-size: 18px;
+      height: 40px;
+      width: 100%;
+      background-color: #f8f8f8;
+      position: fixed;
+      top: 0;
+    }
+
+    .back>img {
+      width: 24px;
+    }
+
+    .container{
+      padding-top: 40px;
+    }
+    .address {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .parcelCommonStyle {
+      color: #777777;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="back">
+    <img class="" src="./img/leftBlack.png" alt="" srcset="">
+    我的记录
+  </div>
+  <div class="container"></div>
+
+</body>
+<script src="./js/jquery.js"></script>
+<script>
+  $(".edit>div").click(function () {
+    alert("功能完善中");
+  })
+  $(".back").click(function () {
+    window.history.back(-1);
+  })
+  // 获取记录信息
+  $.ajax({
+    type: "get",
+    url: "http://kaizhou.1352.site.veeteam.com/home/lon_lat_info",
+    headers: {
+      "token": JSON.parse(localStorage.getItem("userInfo")).token
+    },
+    success: function (res) {
+      var htmlString = "";
+      for (var item of res.data) {
+        let coordinate = JSON.parse(item.lozenges_longitude_latitude)[0];
+        htmlString += `
+          <div class="recordList">
+            <div class="lotIconContainer">
+              <img src="./img/dikuai.png">
+            </div>
+            <div class="information">
+              <p>编号:${item.id}</p>
+              <p>地块名：${item.lon_lat_name}</p>
+              <p class="parcelCommonStyle">坐标：${coordinate.lat},${coordinate.lng}　${item.area}km²</p>
+              <p class="parcelCommonStyle address">地址：${item.address || "暂无"}</p>
+              <p class="parcelCommonStyle">所属主体：${item.name || "暂无"}</p>
+            </div>
+            <div class="edit">
+              
+            </div>
+          </div>
+        `
+      }
+      $(".container").html(htmlString);
+    }
+  })
+</script>
+
+</html>

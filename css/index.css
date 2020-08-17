@@ -1,0 +1,413 @@
+body, html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  font-family: "微软雅黑";
+  overflow: hidden;
+}
+#container{
+  width: 100%;
+  height: 100%;
+}
+
+#mapDiv {
+  height: 100%;
+  width: 100%;
+}
+
+p, input {
+  margin-top: 10px;
+  margin-left: 5px;
+  font-size: 14px;
+}
+
+.tdt-bottom {
+  display: none !important;
+}
+
+.tdt-iconLayers-layer {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.report {
+  display: none;
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;
+  padding: 10px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.shutDown {
+  background: gray;
+  width: 80px;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  color: #fff;
+  border-radius: 30px;
+  margin-top: 20px;
+}
+
+.addressTop {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.currentLocation {
+  position: absolute;
+  top: 10px;
+  z-index: 999;
+  background-color: #fff;
+  padding: 5px;
+  font-size: 13px;
+  max-width: 80%;
+}
+
+.iconContainer {
+  background: #fff;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  z-index: 1001;
+  right: 2%;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 50%;
+}
+
+.iconContainer>img {
+  width: 100%;
+  height: 100%;
+}
+
+.mine {
+  bottom: 12%;
+}
+
+.backPosition {
+  bottom: 12%;
+  left: 2%;
+}
+
+.zoomAdd {
+  bottom: 20%;
+}
+
+.zoomSub {
+  bottom: 28%;
+}
+
+.camera {
+  bottom: 20%;
+  left: 2%;
+  display: none;
+}
+
+.refresh {
+  bottom: 20%;
+  left: 2%;
+  /* bottom: 28%;
+  left: 2%; */
+}
+
+#submit {
+  background-color: dodgerblue;
+  color: #fff;
+  width: 50px;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  margin: 10px auto;
+  display: block;
+}
+
+.btn {
+  width: 60px;
+  background-color: dodgerblue;
+  color: #fff;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  margin: 10px auto;
+}
+
+.buttonGroup {
+  text-align: center;
+}
+
+.control {
+  position: absolute;
+  width: 100%;
+  bottom: 5%;
+  z-index: 998;
+  /* display: grid; */
+  padding: 0 2%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  /* grid-template-rows: 30px 30px;
+  grid-template-columns: 1fr 50px 1fr;
+  grid-gap: 10px 0;
+  grid-template-areas: "reset . ." "start . report"; */
+}
+
+.reportBtn {
+  /* grid-area: report; */
+  /* float: right;
+  position: relative;
+  top: 15px; */
+}
+
+
+
+.control .start{
+  flex-wrap: wrap;
+  flex: 1;
+  margin: 0 2%;
+  font-size: 12px;
+}
+.control .start div{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+}
+
+.control .reset {
+  /*grid-area: reset;
+   display: none; */
+}
+
+.control > .trajectory,.control > .reset,.control > .reportBtn{
+  background-color: #fff;
+  border-radius: 30px;
+  box-shadow: 3px 3px 5px #333333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  height: 30px;
+  flex: 1;
+  margin: 0 2%;
+}
+.start .draw {
+  margin-top: 10px;
+}
+.start .draw , .start .save{
+  background-color: dodgerblue;
+  color: #fff;
+  border-radius: 30px;
+  box-shadow: 3px 3px 5px #333333;
+}
+.start .save{
+  visibility: hidden;
+}
+.control .trajectory {
+  /* grid-area: start; */
+  background-color: dodgerblue;
+  color: #fff;
+  /* float: left;
+  margin-top: 15px; */
+}
+
+
+.tdt-iconLayers-layerCell {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.report .layui-form-item {
+  display: flex;
+  align-items: center;
+}
+
+.report .layui-form-label {
+  text-align: right;
+  padding: 9px 0;
+  width: 100px;
+}
+
+.report .layui-input-block {
+  margin-left: 0px;
+  display: flex;
+  align-items: center;
+}
+
+.report .layui-form-item {
+  margin-bottom: 5px;
+}
+
+.report .layui-form-item .layui-input-block select {
+  height: 30px;
+}
+
+.report .layui-form-item .layui-input-block .layui-input {
+  height: 30px;
+}
+
+.reportPhoto {
+  width: 50px;
+}
+
+
+
+.resourceCategory {
+  position: absolute;
+  background-color: #fff;
+  z-index: 999;
+  /* width: 80px;
+  height: 30px; */
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  /* border-radius: 20px; */
+  right: -154px;
+  color: #fff;
+  top: 10%;
+  max-width: 70%;
+}
+.layui-icon-left,.layui-icon-right{
+  background-color: dodgerblue;
+  position: absolute;
+  left: -34px;
+  width: 30px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 82px 0 0 82px;
+  font-size: 24px;
+}
+.resourceCategory .resourceTab{
+  display: flex;
+  justify-content: space-around;
+  background-color: dodgerblue;
+  padding:5px 10px;
+}
+.resourceTab div{
+  padding: 5px;
+}
+.resourceContainer{
+  color: #333333;
+  padding: 5px;
+}
+.resourceContainer div div{
+
+}
+.resourceType>div,.businessEntity>div{
+  border-bottom: solid 1px #333333;
+  padding: 5px;
+}
+.resourceCategory .active{
+  background-color: rgba(18, 118, 226, 0.5);
+  border: solid 1px #00ffff;
+}
+.businessEntitySubcategory,.resourceCategorySubcategory{
+  display: flex;
+  align-items: center;
+  /* justify-content: space-around; */
+  flex-wrap: wrap;
+}
+.businessEntitySubcategory > div,.resourceCategorySubcategory > div{
+  padding: 5px 10px;
+}
+.reportingAndClosing {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: 30px;
+}
+
+.reportingAndClosing>div {
+  background: gray;
+  width: 80px;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  color: #fff;
+  border-radius: 30px;
+  margin-top: 20px;
+}
+
+.reportingAndClosing>.reportSub {
+  background-color: dodgerblue;
+  width: 80px;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  color: #fff;
+  border-radius: 30px;
+  margin-top: 20px;
+}
+
+.addressDetail {
+  width: 100%;
+}
+
+.addressDetail1 {
+  width: 100%;
+}
+
+.logIn {
+  position: fixed;
+  z-index: 1111;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  width: 80%;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.logIn div {
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.logIn div input {
+  flex: 1;
+}
+
+.logInBtn {
+  display: flex;
+  justify-content: space-around;
+}
+
+.logInBtn>button {
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  width: 100px;
+  height: 30px;
+  border: none;
+}
+
+.logInBtn :nth-child(1) {
+  background-color: dodgerblue;
+  color: #fff;
+}
+
+.remark {
+  display: none;
+}
+
+.tdt-top {
+  /* top: 40% !important; */
+  right: -2%;
+}

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="keywords" content="天地图" />
+  <title>首页</title>
+  <!-- 天地图 -->
+  <script src="http://api.tianditu.gov.cn/api?v=4.0&tk=24a91c78b8442853b9c43daf94bf4479"></script>
+  <script src="http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/HeatmapOverlay.js"></script>
+  <!-- <script src="http://cdn.bootcss.com/d3/3.5.17/d3.js " charset="utf-8"></script> -->
+  <!-- <script src="http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js"></script>
+  <script src="http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/CarTrack.js"></script>
+  <script src="http://lbs.tianditu.gov.cn/api/js4.0/opensource/data/point.js"></script> -->
+
+  <!-- <script src="./js/vconsole.min.js"></script>
+  <script>
+    var vConsole = new VConsole();
+  </script> -->
+
+  <script src="./js/jquery.js"></script>
+  <script src="./js/vue.js"></script>
+  <!-- layui -->
+  <link rel="stylesheet" href="./layui-v2.5.5/layui/css/layui.css">
+  <script src="./layui-v2.5.5/layui/layui.all.js"></script>
+
+  <!-- 多级树形插件 -->
+  <!-- <link rel="stylesheet" href="./css/font-awesome.min.css"> -->
+  <link rel="stylesheet" type="text/css" href="https://www.jq22.com/jquery/font-awesome.4.6.0.css">
+
+  <link rel="stylesheet" href="./css/index.css">
+
+</head>
+
+<body onLoad="onLoad()">
+  <div id="mapDiv"></div>
+  <div class="currentLocation">
+    当前位置：<span id="coordinate"></span>
+    <div class="addressTop"></div>
+  </div>
+  <!-- 功能按钮 -->
+  <div class="iconContainer mine">
+    <img src="./img/login.png" alt="" srcset="">
+  </div>
+  <div class="iconContainer backPosition">
+    <img src="./img/backPosition.png" class="" alt="">
+  </div>
+  <div class="iconContainer zoomAdd">
+    <img src="./img/fangda.png" alt="" class="" srcset="">
+  </div>
+  <div class="iconContainer zoomSub">
+    <img src="./img/suoxiao.png" alt="" class="" srcset="">
+  </div>
+  <div class="iconContainer camera">
+    <img src="./img/camera.png" alt="" srcset="">
+  </div>
+  <div class="iconContainer refresh">
+    <img src="./img/refresh.png" alt="" srcset="">
+  </div>
+  <!-- 资源类目 -->
+  <div class="resourceCategory investors" id="resourceCategory">
+    <i class="layui-icon" :class="{ 'layui-icon-left': isActiveLeft, 'layui-icon-right': isActiveRight }"
+      @click="drawer"></i>
+    <div class="resourceTab">
+      <div @click="tabSwitching(0)" :class="{active:index == 0}">经营主体</div>
+      <div @click="tabSwitching(1)" :class="{active:index == 1}">资源类型</div>
+    </div>
+    <div class="resourceContainer">
+      <!-- 资源类型 -->
+      <div class="resourceType" v-show="index == 1">
+        <div class="" v-for="(item,index) in resourceCategory" :key="item.id">
+          <div @click="pointHeatMapData(2,item.id)">{{item.name}}</div>
+          <div class="resourceCategorySubcategory">
+            <div data-suvId="" v-for="(subItem,index) in item.subCategory" @click="pointHeatMapData(2,subItem.id)">
+              <div>{{subItem.name}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 经营主体 -->
+      <div class="businessEntity" v-show="index == 0">
+        <div class="" v-for="(item,index) in businessEntity" :key="item.id">
+          <div @click="pointHeatMapData(1,item.id)">{{item.name}}</div>
+          <div class="businessEntitySubcategory">
+            <div data-subId="" v-for="(subItem,index) in item.subCategory" @click="pointHeatMapData(1,subItem.id)">
+              <div>{{subItem.name}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="resourceCategory enterprises">龙头企业</div> -->
+  <!-- <div class="iconContainer logInPopups">
+      <img src="./img/login.png" alt="" srcset="">
+    </div> -->
+  
+  <!-- <img src="" alt="" srcset="" id="imgTest" style="width: 200px;height: 200px;position: absolute;top: 50%;z-index: 999;border: solid 1px #333333;"> -->
+  <!-- 按钮 -->
+  <div class="control">
+    <div class="trajectory">绘制轨迹</div>
+    <div class="reset">清除</div>
+    <div class="start">
+      <div class="save">保存</div>
+      <div class="draw">绘制地块</div>
+    </div>
+    <div class="reportBtn">上报数据</div>
+  </div>
+  <script src="./js/index.js"></script>
+  <script src="./js/interaction.js"></script>
+</body>
+
+</html>

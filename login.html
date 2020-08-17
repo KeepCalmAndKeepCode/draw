@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>登录</title>
+  <style>
+    @charset "utf-8";
+
+    /* CSS Document */
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: url(./img/top_bg.jpg) top center no-repeat #ffffff;
+      background-size: 100% 330px;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 1.6rem;
+      width: 100%;
+      text-align: center;
+      margin-top: 30%;
+    }
+
+    .logInSubmit {
+      background: -moz-linear-gradient(left, #1bc0f1 0%, #1bceb2 100%);
+      background: -webkit-gradient(linear, top left, top right, color-stop(0%, #1bc0f1), color-stop(100%, #1bceb2));
+      background: -webkit-linear-gradient(left, #1bc0f1 0%, #1bceb2 100%);
+      background: -o-linear-gradient(left, #1bc0f1 0%, #1bceb2 100%);
+      background: -ms-linear-gradient(left, #1bc0f1 0%, #1bceb2 100%);
+      background: linear-gradient(to right, #1bc0f1 0%, #1bceb2 100%);
+    }
+
+    .logIn {
+      position: fixed;
+      z-index: 1111;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      width: 80%;
+      box-sizing: border-box;
+      border-radius: 10px;
+    }
+
+    .logIn div {
+      height: 40px;
+      display: flex;
+      align-items: center;
+    }
+
+    .logIn div input {
+      flex: 1;
+    }
+
+    .logInBtn {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .logInBtn>button {
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      width: 100px;
+      height: 30px;
+      border: none;
+    }
+
+    .logInBtn :nth-child(2) {
+      background-color: dodgerblue;
+      color: #fff;
+    }
+
+    #phone,
+    #password {
+      height: 30px;
+      line-height: 30px;
+      border: none;
+      outline: none;
+      background: none;
+    }
+
+    .h {
+      height: 30px;
+      line-height: 30px;
+      border-bottom: 1px solid #efefef;
+      margin-bottom: 15px;
+    }
+
+    .h img {
+      width: 30px;
+      height: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>开州区数据上报</h1>
+  <div class="logIn">
+    <div class="h">
+      <span><img src="img/name.png" title="手机号：" /></span>
+      <input id="phone" type="phone">
+    </div>
+    <div class="h">
+      <span><img src="img/loack.png" title="密　码：" /></span>
+      <input id="password" type="password">
+    </div>
+    <div class="logInBtn">
+      <button class="logInShutDown">
+        关闭
+      </button>
+      <button class="logInSubmit">
+        登录
+      </button>
+    </div>
+  </div>
+</body>
+<script src="./js/jquery.js"></script>
+<script>
+  var userInfo = localStorage.getItem("userInfo");
+  function GetRequest() {
+    var url = location.search; //获取url中"?"符后的字串
+    var theRequest = new Object();
+    if (url.indexOf("?") != -1) {
+      var str = url.substr(1);
+      strs = str.split("&");
+      for (var i = 0; i < strs.length; i++) {
+        //这个地方切记用decodeURIComponent转译中文字符而不是unescape，unescape已经被淘汰禁止使用了
+        theRequest[strs[i].split("=")[0]] = decodeURIComponent(strs[i].split("=")[1]);
+      }
+    }
+    return theRequest;
+  }
+  var shutDown = GetRequest();
+  // if (userInfo && shutDown.shutDown != 1) {
+  //   window.location.href = "./index.html"
+  // }
+  // 关闭
+  $(".logInShutDown").click(function () {
+    if (userInfo) {
+      window.location.href = "./index.html"
+    }
+  })
+  // 登录
+  $(".logInSubmit").click(function () {
+    if (!$("#phone").val()) {
+      alert("请填写手机号");
+      return;
+    }
+    if (!$("#password").val()) {
+      alert("请填写密码");
+      return;
+    }
+    
+    $.ajax({
+      type: "post",
+      url: "http://kaizhou.1352.site.veeteam.com/home/user_login",
+      
+      data: {
+        name: $("#phone").val(),
+        password: $("#password").val()
+      },
+      success: res => {
+        switch (res.code) {
+          case 1003:
+            alert("用户不存在");
+            break;
+          case 1002:
+            alert("密码错误");
+            break;
+          case 1004:
+            alert("token不存在");
+            break;
+          case 1000:
+            alert(res.message);
+            localStorage.setItem("userInfo", JSON.stringify(res.data));
+            window.location.href = "./index.html"
+        }
+      }
+    })
+  })
+</script>
+
+</html>

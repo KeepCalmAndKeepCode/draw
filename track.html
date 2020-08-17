@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>轨迹</title>
+  <style>
+    body {
+      background: #f8f8f8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .back {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #F7F7F7;
+      font-weight: 600;
+      font-size: 18px;
+      height: 40px;
+      width: 100%;
+      background-color: #f8f8f8;
+      position: fixed;
+      top: 0;
+    }
+
+    .back>img {
+      width: 24px;
+    }
+
+    .container{
+      padding-top: 40px;
+    }
+
+    .container>div {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-around;
+      background-color: #fff;
+      margin: 20px 4%;
+      padding: 20px 0 ;
+      border-radius: 6px;
+      box-shadow: 0 0 2px 2px #bbb;
+    }
+
+    .container>div>div {
+      line-height: 22px;
+    }
+
+    .container>div>img {
+      flex: 0.2;
+    }
+
+    .coordinate,
+    .location,
+    .area {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: #777;
+      font-size: 13px;
+    }
+
+    html {
+      color: #333333;
+    }
+
+    .lotIconContainer {
+      display: flex;
+      text-align: center;
+      justify-content: center;
+      width: 20%;
+      height: 30px;
+    }
+    .lotInfo{
+      width: 80%;
+    }
+
+    .lotIconContainer>img {
+      width: 30px;
+    }
+    .trackName{
+      font-size: 18px;
+      font-weight: 400;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .segmentation{
+      color:#37C374;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="back">
+    <img class="" src="./img/leftBlack.png" alt="" srcset="">
+    我的轨迹
+  </div>
+  <div class="container"></div>
+</body>
+<script src="./js/jquery.js"></script>
+
+<script>
+  $(".back").click(function () {
+    window.history.back(-1);
+  })
+  // var track = localStorage.getItem
+
+  // 获取localStorage缓存
+  var len = localStorage.length;  // 获取长度
+  var arr = []; // 定义数据集
+  for (var i = 0; i < len; i++) {
+    // 获取key 索引从0开始
+    var getKey = localStorage.key(i);
+    if (getKey.indexOf("trackName") != -1) {
+      // 获取key对应的值
+      var getVal = JSON.parse(localStorage.getItem(getKey));
+      // 放进数组
+      arr.push(getVal)
+    }
+  }
+  console.log(arr);
+  var htmlStr = "";
+  for (var item of arr) {
+    console.log(item);
+    var lngLatHtml = '';
+    var trackHtml = "";
+    for (var itemLngLat of item.lng_lat) {
+      lngLatHtml += `${itemLngLat.lng},${itemLngLat.lat}<span class="segmentation">/</span>`
+    }
+    for (var itemTrack of item.track) {
+      trackHtml += `${itemTrack}<span class="segmentation">/</span>`
+    }
+    htmlStr += `
+      <div>
+        <div class="lotIconContainer">
+          <img src="./img/guiji.png">
+        </div>
+        <div class="lotInfo">
+          <div class="trackName">轨迹名：${item.trackName}</div>
+          <div class="coordinate"><span>轨迹坐标：</span>${lngLatHtml}</div>
+          <div class="location"><span>轨迹地点：</span>${trackHtml}</div>
+          <div class="area"><span>长度：</span>${item.tracklength || 0}m</div>
+        </div>
+      </div>
+    `
+  }
+  $(".container").html(htmlStr);
+</script>
+
+</html>

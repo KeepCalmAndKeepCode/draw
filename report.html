@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>上报</title>
+  <!-- <link rel="stylesheet" href="./layui-v2.5.5/layui/css/layui.css"> -->
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link href="css/ySelect.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="css/report.css">
+
+  <script src="./js/vconsole.min.js"></script>
+  <script src="./layui-v2.5.5/layui/layui.all.js"></script>
+  <script src="./js/jquery.js"></script>
+  <script src="./js/vue.js"></script>
+  <script src="./js/lrz.bundle.js"></script>
+
+</head>
+
+<body>
+  <div class="back">
+    <img src="./img/leftBlack.png" alt="" srcset="">
+    <span>上报数据</span>
+  </div>
+  <form class="report" id="addForm">
+    <div class="requiredField">
+      <!-- <div style="color: red;padding-left: 10px;"> 此页所有字段均为必填项 </div> -->
+      <div class="layui-form-item">
+        <label class="layui-form-label">上报地块：</label>
+        <div class="layui-input-block">
+          <select name="" lay-verify="required" id="reportPlot">
+            <option value="">选择上报地块：</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">单位名称：</label>
+        <div class="layui-input-block">
+          <input type="text" name="name" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input fullUnitName">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">法人：</label>
+        <div class="layui-input-block">
+          <input type="text" name="corporation" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">联系电话：</label>
+        <div class="layui-input-block">
+          <input type="text" name="phone" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">所属地区：</label>
+        <div class="layui-input-block">
+          <select name="town" id="township" lay-verify="required">
+            <option value="">所属乡镇：</option>
+            <!-- <option value="0">开州区</option>
+            <option value="1">上海</option>
+            <option value="2">广州</option>
+            <option value="3">深圳</option>
+            <option value="4">杭州</option> -->
+          </select>
+          <select name="village" id="community" lay-verify="required">
+            <option value="">所属社区：</option>
+            <!-- <option value="0">天和镇</option>
+            <option value="1">中和镇</option>
+            <option value="2">义和镇</option>
+            <option value="3">临江镇</option>
+            <option value="4">竹溪镇</option> -->
+          </select>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">详细地址：</label>
+        <div class="layui-input-block">
+          <input type="text" name="address" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">服务类型：</label>
+        <div class="layui-input-block">
+          <input type="text" name="type_service" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">服务规模：</label>
+        <div class="layui-input-block">
+          <input type="text" name="service_scope" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">经营类目：</label>
+        <div class="layui-input-block">
+          <select id="businessCategory" class="businessCategory" multiple="multiple">
+
+          </select>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">经营状况：</label>
+        <div class="layui-input-block operatingConditions">
+          <input type="radio" class="" name="state_business" value="1"><span>好</span>
+          <input type="radio" class="" name="state_business" value="2"><span>中</span>
+          <input type="radio" class="" name="state_business" value="3"><span>差</span>
+        </div>
+      </div>
+      
+      <div class="layui-form-item reportPhotoContainer">
+        <label class="layui-form-label">上报照片：</label>
+        <img class="reportPhoto" src="./img/add.png" alt="" srcset="">
+        <input type="file" name="file[]" id="file1" accept="image/*"  multiple />
+        <div class="pictureContainer"></div>
+      </div>
+      <div class="layui-form-item reportVideoContainer">
+        <label class="layui-form-label">上报视频：</label>
+        <img class="reportVideo" src="./img/add.png" alt="" srcset="">
+        <input type="file" name="file[]" id="file2" accept="video/*"  multiple />
+        <div class="videoContainer"></div>
+      </div>
+      <div style="color: red;">视频时长尽量不要超过15秒，否则视频将上传缓慢或无法上传</div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">单位性质：</label>
+        <div class="layui-input-block">
+          <select name="level_oneid" lay-verify="required" class="unitNature">
+            <!-- <option value="clearn">选择单位性质</option>
+            <option value="24" id="">种粮大户</option>
+            <option value="29" id="">养殖大户</option>
+            <option value="26">家庭农场</option>
+            <option value="27">农民合作社</option>
+            <option value="25">龙头企业</option>
+            <option value="30">农机大户</option>
+            <option value="28">其他</option> -->
+          </select>
+
+          <select name="level" lay-verify="required" class="unitNatureSecondary">
+            <option value="">选择单位性质</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">资源类型：</label>
+        <div class="layui-input-block resourceCheckbox">
+          <!-- <input type="checkbox" name="like[write]" title="写作">
+          <input type="checkbox" name="like[]" title="阅读" checked>
+          <input type="checkbox" name="like[dai]" title="发呆"> -->
+        </div>
+      </div>
+
+      <!-- 选择单位性质时的表单切换 -->
+      <div class="formSwitching">
+      </div>
+      <!-- 类型（标签） -->
+      <!-- <div class="layui-form-item" lay-filter="filter">
+        <label class="layui-form-label">是否三品一标：</label>
+        <div class="layui-input-block">
+          <input type="radio" class="three_grades" lay-filter="filter" name="threeProductsAndOneBid" value="1" title="是">是
+          <input type="radio" class="three_grades" lay-filter="filter" name="threeProductsAndOneBid" value="0" title="否">否
+        </div>
+      </div> -->
+      <!-- 资源类型栏目 -->
+      <div class="resourceType">
+
+      </div>
+    </div>
+    <!-- <div class="remark">
+      <div class="layui-form-item">
+        <label class="layui-form-label">备注1：</label>
+        <textarea name="content1" id="content1" required lay-verify="required" placeholder="请输入"
+          class="layui-textarea"></textarea>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">备注2：</label>
+        <textarea name="content2" id="content2" required lay-verify="required" placeholder="请输入"
+          class="layui-textarea"></textarea>
+      </div>
+    </div> -->
+    <div class="reportingAndClosing">
+      <!-- <div class="nextPage">下一页</div> -->
+      <div class="shutDown">关　闭</div>
+      <div class="reportSub">上　报</div>
+    </div>
+  </form>
+</body>
+<!-- 种粮大户 -->
+<script type="text/html" id="largeGrainGrowers">
+  <div class="layui-form-item">
+    <label class="layui-form-label">身份证号码：</label>
+    <div class="layui-input-block">
+      <input type="text" name="id_card" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">大户性质：</label>
+    <div class="layui-input-block">
+      <select name="nature" lay-verify="required" class="">
+        <option value="">选择单位性质</option>
+        <option value="1">个人</option>
+        <option value="2">法人</option>
+        <option value="3">合作社</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">种粮地点：</label>
+    <div class="layui-input-block">
+      <input type="text" name="site" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">承包耕地：</label>
+    <div class="layui-input-block">
+      <input type="number" name="contract" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">租种耕地：</label>
+    <div class="layui-input-block">
+      <input type="number" name = "farmi" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">合计耕地：</label>
+    <div class="layui-input-block">
+      <input type="text" name="count" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">水稻面积：</label>
+    <div class="layui-input-block">
+      <input type="number" name = "paddy" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">玉米面积：</label>
+    <div class="layui-input-block">
+      <input type="number" name = "maize" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">小麦面积：</label>
+    <div class="layui-input-block">
+      <input type="number" name = "wheat" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">红苕面积：</label>
+    <div class="layui-input-block">
+      <input type="number" name = "sweet_potato" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">马铃薯面积：</label>
+    <div class="layui-input-block">
+      <input type="number" name = "potato" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">大豆面积：</label>
+    <div class="layui-input-block">
+      <input type="number" name = "soya" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">绿豆面积：</label>
+    <div class="layui-input-block">
+      <input type="number" name = "gram" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">葫豆面积：</label>
+    <div class="layui-input-block">
+      <input type="number" name = "assembles_bean" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">高粱面积：</label>
+    <div class="layui-input-block">
+      <input type="number" name = "sorghum" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">荞麦面积：</label>
+    <div class="layui-input-block">
+      <input type="number" name = "straw" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">肾豆面积：</label>
+    <div class="layui-input-block">
+      <input type="number" name = "kidney_beans" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">红小豆面积：</label>
+    <div class="layui-input-block">
+      <input type="number" name = "small_red_bean" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">面积合计：</label>
+    <div class="layui-input-block">
+      <input type="number" name = "area_count" required lay-verify="required" autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+</script>
+<!-- 家庭农场 -->
+<script type="text/html" id="familyFarm">
+  <div class="layui-form-item">
+    <label class="layui-form-label">生产规模：</label>
+    <div class="layui-input-block">
+      <input type="text" name="process_scale" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label">从业人员总数：</label>
+    <div class="layui-input-block">
+      <input type="text" name="employee" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">家庭成员数：</label>
+    <div class="layui-input-block">
+      <input type="text" name="family_member" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">注册号：</label>
+    <div class="layui-input-block">
+      <input type="text" name="registration_number" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">法人年龄：</label>
+    <div class="layui-input-block">
+      <input type="number" name="age" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">法人性别：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="sex" value="1" >男
+      <input type="radio" class="" name="sex" value="2" >女
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">身份证号：</label>
+    <div class="layui-input-block">
+      <input type="text" name="id_card" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">文化程度：</label>
+    <div class="layui-input-block">
+      <input type="text" name="culture" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">注册性质：</label>
+    <div class="layui-input-block">
+      <input type="text" name="register" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">主业及主要产品：</label>
+    <div class="layui-input-block">
+      <input type="text" name="product" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">成立日期：</label>
+    <div class="layui-input-block">
+      <input type="date" name="date_establishment" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">常年雇工数：</label>
+    <div class="layui-input-block">
+      <input type="text" name="hire_labour" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">家庭总收入：</label>
+    <div class="layui-input-block">
+      <input type="text" name="family_income" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">家庭农场净收入：</label>
+    <div class="layui-input-block">
+      <input type="text" name="net_income" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">比例（%）：</label>
+    <div class="layui-input-block">
+      <input type="text" name="income_ratio" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否贫困村：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="poor_villages" value="1" >是
+      <input type="radio" class="" name="poor_villages" value="0" >否
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">土地流转面积：</label>
+    <div class="layui-input-block">
+      <input type="text" class="layui-input" name="circulation_area" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">土地流转期限（年）：</label>
+    <div class="layui-input-block">
+      <input type="text" class="layui-input" name="transfer_deadline" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">户籍性质：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="census_register" value="1" >农村
+      <input type="radio" class="" name="census_register" value="2" >城镇
+      <input type="radio" class="" name="census_register" value="3" >农转非
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">获得财政扶持资金总额：</label>
+    <div class="layui-input-block">
+      <input type="text" class="layui-input" name="support_fund" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">本级：</label>
+    <div class="layui-input-block">
+      <input type="text" class="layui-input" name="same_level" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">章程是否健全：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="is_constitution" value="1" >是
+      <input type="radio" class="" name="is_constitution" value="0" >否
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">财务制度是否健全：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="is_finance" value="1" >是
+      <input type="radio" class="" name="is_finance" value="0" >否
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否按年度开展财务预决算:</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="is_actual_budget" value="1" >是
+      <input type="radio" class="" name="is_actual_budget" value="0" >否
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否有专业财务人员:</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="is_financial_staff" value="1" >是
+      <input type="radio" class="" name="is_financial_staff" value="0" >否
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否创办加工企业:</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="is_processors" value="1" >是
+      <input type="radio" class="" name="is_processors" value="0" >否
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否开展信用合作:</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="is_credit_cooperation" value="1" >是
+      <input type="radio" class="" name="is_credit_cooperation" value="0" >否
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否贫困村:</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="is_poor_villages" value="1" >是
+      <input type="radio" class="" name="is_poor_villages" value="0" >否
+    </div>
+  </div>
+</script>
+<!-- 农民合作社 -->
+<script type="text/html" id="farmersCooperatives">
+  <div class="layui-form-item">
+    <label class="layui-form-label">注册号：</label>
+    <div class="layui-input-block">
+      <input type="text" class="layui-input" name="registration_number" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">注册资本(金)万元：</label>
+    <div class="layui-input-block">
+      <input type="text" class="layui-input" name="registered_capital" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">成立日期：</label>
+    <div class="layui-input-block">
+      <input type="date" class="layui-input" name="establishment" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">经营范围：</label>
+    <div class="layui-input-block">
+      <input type="text" class="layui-input" name="business_scope" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">企业类型：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="type_enterprise" value="1" >农民专业合作经济组织
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">经营场所：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="place" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">属地监管工商所：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="trade_industry" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">成员数：</label>
+    <div class="layui-input-block">
+      <input type="number" class="" name="membership" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">带动就业数：</label>
+    <div class="layui-input-block">
+      <input type="number" class="" name="number_jobs" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">商标名称：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="trade_name" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">证书编号：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="serial_number" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">证书有效开始日期：</label>
+    <div class="layui-input-block">
+      <input type="date" class="" name="start_date" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">证书有效截至日期：</label>
+    <div class="layui-input-block">
+      <input type="date" class="" name="valid_time" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">生产规模：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="process_scale" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">产品年产量（吨）：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="annual_output" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">产品年产值（万元）：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="value_production" value="" >
+    </div>
+  </div>
+
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">年销售额（万元）：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="saleroom" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">年出口量（吨）：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="export_volume" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">年出口额：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="amount_exports" value="" >
+    </div>
+  </div>
+</script>
+<!-- 龙头企业 -->
+<script type="text/html" id="leadingEnterprise">
+  <div class="layui-form-item">
+    <label class="layui-form-label">信用代码：</label>
+    <div class="layui-input-block">
+      <input type="text" name="credit" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">法人代表：</label>
+    <div class="layui-input-block">
+      <input type="text" name="corp" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">级别：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="rank" value="1" >国家级龙头企业
+      <input type="radio" class="" name="rank" value="2" >市级龙头企业
+      <input type="radio" class="" name="rank" value="3" >区级龙头企业
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">产品主要销售地：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="sales_area" value="1" >国内
+      <input type="radio" class="" name="sales_area" value="2" >周边城市
+      <input type="radio" class="" name="sales_area" value="3" >国外
+      <input type="radio" class="" name="sales_area" value="4" >省内
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否帮扶贫：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="is_poverty" value="1" >是
+      <input type="radio" class="" name="is_poverty" value="0" >否
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">资产总额：</label>
+    <div class="layui-input-block">
+      <input type="number" name="property" required lay-verify="required"  autocomplete="off" class="layui-input ">
+      （万元）
+    </div>
+    
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">固定资产：</label>
+    <div class="layui-input-block">
+      <input type="number" name="fixation" required lay-verify="required"  autocomplete="off" class="layui-input ">
+      （万元）
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">利润总额：</label>
+    <div class="layui-input-block">
+      <input type="number" name="earnings" required lay-verify="required"  autocomplete="off" class="layui-input ">
+      （万元）
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">销售收入：</label>
+    <div class="layui-input-block">
+      <input type="number" name="market" required lay-verify="required"  autocomplete="off" class="layui-input ">
+      （万元）
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">上缴税金：</label>
+    <div class="layui-input-block">
+      <input type="number" name="paid" required lay-verify="required"  autocomplete="off" class="layui-input ">
+      （万元)
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">带动农户：</label>
+    <div class="layui-input-block">
+      <input type="number" name="farmer" required lay-verify="required"  autocomplete="off" class="layui-input ">
+      （户）
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">带动农民就业：</label>
+    <div class="layui-input-block">
+      <input type="number" name="employment" required lay-verify="required"  autocomplete="off" class="layui-input ">
+      （人）
+    </div>
+  </div>
+</script>
+<!-- 农机大户 -->
+<script type="text/html" id="bigAgriculturalMachinery">
+  <div class="layui-form-item">
+    <label class="layui-form-label">行政区域编码：</label>
+    <div class="layui-input-block">
+      <input type="text" name="area_code" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否本市：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="household_type" value="1" >本市
+      <input type="radio" class="" name="household_type" value="2" >外籍
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">农机类型：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="agricultural_machinery_type" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">品牌型号：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="brand" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">号牌号码：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="flapper" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">车架号码：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="carriage" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">发动机号码：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="engine" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">年检有效日期：</label>
+    <div class="layui-input-block">
+      <input type="date" class="" name="annual" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">初次登记日期：</label>
+    <div class="layui-input-block">
+      <input type="date" class="" name="register" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">备注：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="remark" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">车主姓名：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="name_owner" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">牌证真伪：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="authenticity_license" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">联系电话：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="contact_number" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">厂牌型号：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="brand_model" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">年审有效时间：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="annual_review_effective_time" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">年审真伪：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="annual_review" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">驾驶员姓名：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="driver_name" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">驾驶证号：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="drivers_license_number" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">驾驶证真伪：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="authenticity_of_driving_license" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">审验有效时间截止时间：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="authenticity_of_driving_license" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">审验真伪：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="test_authenticity" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">准驾车型：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="quasidriving" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">车辆经销单位：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="vehicle_distribution_unit" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">经销单位经办人员：</label>
+    <div class="layui-input-block">
+      <input type="text" class="" name="dealer_distribution_unit" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">经办人员联系电话：</label>
+    <div class="layui-input-block">
+      <input type="phone_number_manager" class="" name="phone_number_manager" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">纬度：</label>
+    <div class="layui-input-block">
+      <input type="number" class="" name="latitude" value="" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">经度：</label>
+    <div class="layui-input-block">
+      <input type="number" class="" name="longitude" value="" >
+    </div>
+  </div>
+  
+</script>
+<!-- 养殖大户 -->
+<script type="text/html" id="largeBreeder">
+  <div class="layui-form-item">
+    <label class="layui-form-label">身份证号码：</label>
+    <div class="layui-input-block">
+      <input type="text" name="id_card" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">养殖畜种：</label>
+    <div class="layui-input-block">
+      <input type="text" name="breeding_breeds" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">设计存栏量：</label>
+    <div class="layui-input-block">
+      <input type="text" name="design_inventory" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">设计出栏量：</label>
+    <div class="layui-input-block">
+      <input type="text" name="design_quantity" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">现有存栏量：</label>
+    <div class="layui-input-block">
+      <input type="text" name="existing_stock" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">上年出栏量：</label>
+    <div class="layui-input-block">
+      <input type="text" name="last_year_quantity" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">圈舍面积：</label>
+    <div class="layui-input-block">
+      <input type="text" name="area" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">统一社会信用代码：</label>
+    <div class="layui-input-block">
+      <input type="text" name="credit_code" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">动物防疫条件合格证号：</label>
+    <div class="layui-input-block">
+      <input type="text" name="quarantine_certificate" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">种畜禽生产经营许可证：</label>
+    <div class="layui-input-block">
+      <input type="text" name="business_certificate" required lay-verify="required"  autocomplete="off" class="layui-input ">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否有沼气池：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="is_biogas_digester" value="1" >是
+      <input type="radio" class="" name="is_biogas_digester" value="0" >否
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否有干粪堆沤发酵池：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="is_dry_dunghill" value="1" >是
+      <input type="radio" class="" name="is_dry_dunghill" value="0" >否
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否有粪污贮存池：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="is_feces" value="1" >是
+      <input type="radio" class="" name="is_feces" value="0" >否
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否有粪污处理设施是否配套：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="is_mating" value="1" >是
+      <input type="radio" class="" name="is_mating" value="0" >否
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否有粪污是否实现资源化利用：</label>
+    <div class="layui-input-block">
+      <input type="radio" class="" name="is_resource_utilization" value="1" >是
+      <input type="radio" class="" name="is_resource_utilization" value="0" >否
+    </div>
+  </div>
+</script>
+<script src="./js/ySelect.js"></script>
+<script src="./js/report.js"></script>
+
+</html>

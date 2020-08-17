@@ -1,0 +1,192 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.report {
+  /* display: none; */
+  background-image: url(../img/reportBackground.png);
+  background-size: 100% 100%;
+  width: 100%;
+  /* height: 100%; */
+  /* position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001; */
+  /* padding: 10px; */
+  box-sizing: border-box;
+  padding: 40px 0 50px 0;
+}
+
+.report .layui-form-item {
+  display: flex;
+  align-items: center;
+}
+
+.report .layui-form-label {
+  text-align: right;
+  padding: 9px 0;
+  width: 100px;
+}
+
+.report .layui-input-block {
+  margin-left: 0px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.report .layui-form-item {
+  margin-bottom: 5px;
+}
+
+.report .layui-form-item .layui-input-block select {
+  height: 30px;
+  box-sizing: border-box;
+}
+
+.report .layui-form-item .layui-input-block .layui-input {
+  height: 30px;
+  box-sizing: border-box;
+}
+
+.reportPhoto , .reportVideo{
+  width: 50px;
+}
+
+#file1 {
+  display: none;
+}
+#file2 {
+  display: none;
+}
+
+.reportingAndClosing {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: 30px;
+}
+.operatingConditions{
+  display: flex;
+  align-items: center;
+}
+.operatingConditions input{
+  margin: 0;
+}
+.operatingConditions span{
+  margin: 0 5px;
+}
+
+.reportingAndClosing>div {
+  background: gray;
+  width: 80px;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  color: #fff;
+  border-radius: 30px;
+  margin-top: 20px;
+}
+
+.reportingAndClosing>.reportSub {
+  background-color: dodgerblue;
+  width: 80px;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  color: #fff;
+  border-radius: 30px;
+  margin-top: 20px;
+}
+
+.remark {
+  display: none;
+}
+
+#largeProTpl {
+  display: none;
+}
+
+.layui-form-label {
+  white-space: wrap !important;
+}
+
+.back {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  position: fixed;
+  width: 100%;
+  background-color: #fff;
+  height: 40px;
+}
+
+.back>img {
+  width: 24px;
+}
+
+.fs-selectAll {
+  display: none;
+}
+
+.requiredField {}
+
+.resourceCheckbox>div {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.subResourceType{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 10px 0;
+}
+.subResourceType>div{
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  font-size: 12px;
+}
+.fs-option{
+  display: flex;
+  align-items: center;
+}
+
+.fs-checkbox{
+  padding-right: 5px;
+}
+.pictureContainer{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.pictureContainer img{
+  margin: 1%;
+  width: 30%;
+}
+
+.videoContainer{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.videoContainer video{
+  width: 30%;
+  margin: 1%;
+}
+input[type="radio"], input[type="checkbox"]{
+  margin: 0 10px 0 0;
+}
+.reportPhotoContainer , .reportVideoContainer{
+  flex-wrap: wrap;
+}
+label{
+  margin: 0;
+}
